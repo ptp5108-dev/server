@@ -76,6 +76,8 @@ def receive_lora_data():
     if foo_value:
         print(f"Device EUI: {dev_eui}")
         print(f"Extracted Pair -> foo: {foo_value}")
+        if foo_value=='bar':
+            print("YAYAYAYAY")
         
         # This is where you would save the data to a database (SQLite, PostgreSQL, etc.)
         # e.g., save_to_db(dev_eui, foo_value)
