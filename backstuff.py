@@ -77,41 +77,41 @@ def receive_lora_data():
     
     dev_eui = payload.get('deviceInfo').get('devEui') # Good practice to track which device sent it!
     #if dev_eui ==lilygo - check payload obj
-    #send downlink
+    #send downlink with command as payload value
     if foo_value:
         print(f"Device EUI: {dev_eui}")
         print(f"Extracted Pair -> foo: {foo_value}")
         if foo_value=='bar':
             print("YAYAYAYAY")
             ########
-            headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}",
-        }
+        #     headers = {
+        #     "Accept": "application/json",
+        #     "Content-Type": "application/json",
+        #     "Authorization": f"Bearer {API_KEY}",
+        # }
 
-        payload = {
-        "flushQueue": False,
-        "queueItem": {
-            "confirmed": False,
-            "data": "string",
-            # "expiresAt": "2026-06-17T11:54:15.788Z",
-            "fCntDown": 0,
-            "fPort": 223,
-            "id": "string",
-            "isEncrypted": False,
-            "isPending": True,
-            "object": {
-        "command":'off'
-        }
-        }
-        }
-        response = requests.post(API_URL, json=payload, headers=headers, verify=False)
-        if response.status_code == 200:
-            print("Success! Downlink successfully enqueued.")
-            return(response.json())
-        else:
-            return(f"Failed with code {response.status_code}: {response.text}")
+        # payload = {
+        # "flushQueue": False,
+        # "queueItem": {
+        #     "confirmed": False,
+        #     "data": "string",
+        #     # "expiresAt": "2026-06-17T11:54:15.788Z",
+        #     "fCntDown": 0,
+        #     "fPort": 223,
+        #     "id": "string",
+        #     "isEncrypted": False,
+        #     "isPending": True,
+        #     "object": {
+        # "command":'off'
+        # }
+        # }
+        # }
+        # response = requests.post(API_URL, json=payload, headers=headers, verify=False)
+        # if response.status_code == 200:
+        #     print("Success! Downlink successfully enqueued.")
+        #     return(response.json())
+        # else:
+        #     return(f"Failed with code {response.status_code}: {response.text}")
 
             ############
     else:
