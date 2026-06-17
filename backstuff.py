@@ -83,7 +83,7 @@ def send_downlink(cmd):
             "isEncrypted": False,
             "isPending": True,
             "object": {
-        "command":command
+        "command":cmd
         }
         }
         }
