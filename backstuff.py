@@ -58,6 +58,12 @@ def downlink_process():
         return(f"Network error: {e}")
 
 
+
+
+
+
+
+
 @app.route('/webhook', methods=['POST'])
 def receive_lora_data():
     # 1. Grab the JSON payload sent by the LoRaWAN integration
@@ -78,45 +84,49 @@ def receive_lora_data():
     dev_eui = payload.get('deviceInfo').get('devEui') # Good practice to track which device sent it!
     #if dev_eui ==lilygo - check payload obj
     #send downlink with command as payload value
-    if foo_value:
-        print(f"Device EUI: {dev_eui}")
-        print(f"Extracted Pair -> foo: {foo_value}")
-        if foo_value=='bar':
-            print("YAYAYAYAY")
-            ########
-        #     headers = {
-        #     "Accept": "application/json",
-        #     "Content-Type": "application/json",
-        #     "Authorization": f"Bearer {API_KEY}",
-        # }
+    if dev_eui=='b37ee1fc3144fa9f':
+        btn_value = object_data.get('btn')
+        if btn_value:
+            headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {API_KEY}",
+                }
 
-        # payload = {
-        # "flushQueue": False,
-        # "queueItem": {
-        #     "confirmed": False,
-        #     "data": "string",
-        #     # "expiresAt": "2026-06-17T11:54:15.788Z",
-        #     "fCntDown": 0,
-        #     "fPort": 223,
-        #     "id": "string",
-        #     "isEncrypted": False,
-        #     "isPending": True,
-        #     "object": {
-        # "command":'off'
-        # }
-        # }
-        # }
-        # response = requests.post(API_URL, json=payload, headers=headers, verify=False)
-        # if response.status_code == 200:
-        #     print("Success! Downlink successfully enqueued.")
-        #     return(response.json())
-        # else:
-        #     return(f"Failed with code {response.status_code}: {response.text}")
-
-            ############
-    else:
-        print("Webhook received, but 'foo' key wasn't found in the decoded data.")
-        print(f"Raw payload for debugging: {payload}")
+            payload = {
+            "flushQueue": False,
+            "queueItem": {
+            "confirmed": False,
+            "data": "string",
+            # "expiresAt": "2026-06-17T11:54:15.788Z",
+            "fCntDown": 0,
+            "fPort": 223,
+            "id": "string",
+            "isEncrypted": False,
+            "isPending": True,
+            "object": {
+            "command":btn_value
+            }
+                }
+                }
+            response = requests.post(API_URL, json=payload, headers=headers, verify=False)
+            if response.status_code == 200:
+                print("Success! Downlink successfully enqueued.")
+                return(response.json())
+            else:
+                return(f"Failed with code {response.status_code}: {response.text}")
+        else:
+            print("Webhook received, but 'btn' key wasn't found in the decoded data.")
+            print(f"Raw payload for debugging: {payload}")
+    elif dev_eui =='94944a0000071530':
+        if foo_value:
+            print(f"Device EUI: {dev_eui}")
+            print(f"Extracted Pair -> foo: {foo_value}")
+            if foo_value=='bar':
+                print("YAYAYAYAY")
+        else:
+            print("Webhook received, but 'foo' key wasn't found in the decoded data.")
+            print(f"Raw payload for debugging: {payload}")
 
     # 4. Always return a 200 OK to the LoRaWAN server so it knows you got the data
     return jsonify({"status": "success"}), 200
