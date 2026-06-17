@@ -18,11 +18,39 @@ API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNz
 @app.route("/api/downlink", methods=['POST'])
 def downlink_process():
     try:
+        
         data=request.json
         command = data.get("command")
         if not command:
             return jsonify({"error":"no command"}),400
-        send_downlink(command)
+        headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {API_KEY}",
+        }
+
+        payload = {
+        "flushQueue": False,
+        "queueItem": {
+            "confirmed": False,
+            "data": "string",
+            # "expiresAt": "2026-06-17T11:54:15.788Z",
+            "fCntDown": 0,
+            "fPort": 223,
+            "id": "string",
+            "isEncrypted": False,
+            "isPending": True,
+            "object": {
+        "command":command
+        }
+        }
+        }
+        response = requests.post(API_URL, json=payload, headers=headers, verify=False)
+        if response.status_code == 200:
+            print("Success! Downlink successfully enqueued.")
+            return(response.json())
+        else:
+            return(f"Failed with code {response.status_code}: {response.text}")
     except Exception as e:
         return(f"Network error: {e}")
 
@@ -62,41 +90,7 @@ def receive_lora_data():
     # 4. Always return a 200 OK to the LoRaWAN server so it knows you got the data
     return jsonify({"status": "success"}), 200
 
-
-
-def send_downlink(cmd):
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}",
-        }
-
-        payload = {
-        "flushQueue": False,
-        "queueItem": {
-            "confirmed": False,
-            "data": "string",
-            # "expiresAt": "2026-06-17T11:54:15.788Z",
-            "fCntDown": 0,
-            "fPort": 223,
-            "id": "string",
-            "isEncrypted": False,
-            "isPending": True,
-            "object": {
-        "command":cmd
-        }
-        }
-        }
-        response = requests.post(API_URL, json=payload, headers=headers, verify=False)
-        if response.status_code == 200:
-            print("Success! Downlink successfully enqueued.")
-            return(response.json())
-        else:
-            return(f"Failed with code {response.status_code}: {response.text}")
-        
-
-
-
+    
 import os
 
 if __name__ == "__main__":
