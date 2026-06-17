@@ -15,6 +15,9 @@ def home():
 print("yippeee")
 API_URL = "https://console.helium-iot.xyz/api/devices/94944a0000071530/queue"
 API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNzIjoiY2hpcnBzdGFjayIsInN1YiI6ImY4Y2UwNDQ5LTBmOTItNDFlNi05ZjBiLThjZmFjMjdiNDMxNSIsInR5cCI6ImtleSJ9.jE4OlznQGvsFqJ1BN5Ew5BdVgB8voF40_A01Wx4hXTo"
+
+
+
 @app.route("/api/downlink", methods=['POST'])
 def downlink_process():
     try:
@@ -80,9 +83,37 @@ def receive_lora_data():
         print(f"Extracted Pair -> foo: {foo_value}")
         if foo_value=='bar':
             print("YAYAYAYAY")
-        
-        # This is where you would save the data to a database (SQLite, PostgreSQL, etc.)
-        # e.g., save_to_db(dev_eui, foo_value)
+            ########
+            headers = {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+            "Authorization": f"Bearer {API_KEY}",
+        }
+
+        payload = {
+        "flushQueue": False,
+        "queueItem": {
+            "confirmed": False,
+            "data": "string",
+            # "expiresAt": "2026-06-17T11:54:15.788Z",
+            "fCntDown": 0,
+            "fPort": 223,
+            "id": "string",
+            "isEncrypted": False,
+            "isPending": True,
+            "object": {
+        "command":'off'
+        }
+        }
+        }
+        response = requests.post(API_URL, json=payload, headers=headers, verify=False)
+        if response.status_code == 200:
+            print("Success! Downlink successfully enqueued.")
+            return(response.json())
+        else:
+            return(f"Failed with code {response.status_code}: {response.text}")
+
+            ############
     else:
         print("Webhook received, but 'foo' key wasn't found in the decoded data.")
         print(f"Raw payload for debugging: {payload}")
