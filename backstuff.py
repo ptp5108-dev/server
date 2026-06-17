@@ -71,7 +71,8 @@ def receive_lora_data():
     
     # 3. Pull out your "foo" value
     foo_value = object_data.get('foo')
-    dev_eui = payload.get('devEui') # Good practice to track which device sent it!
+    
+    dev_eui = payload.get('deviceInfo').get('devEui') # Good practice to track which device sent it!
 
     if foo_value:
         print(f"Device EUI: {dev_eui}")
