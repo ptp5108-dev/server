@@ -80,12 +80,12 @@ def receive_lora_data():
     
     # 3. Pull out your "foo" value
     foo_value = object_data.get('foo')
+    btn_value = object_data.get('btn')
     
     dev_eui = payload.get('deviceInfo').get('devEui') # Good practice to track which device sent it!
     #if dev_eui ==lilygo - check payload obj
     #send downlink with command as payload value
-    if dev_eui=='b37ee1fc3144fa9f':
-        btn_value = object_data.get('btn')
+    if dev_eui=='0a10aced202194944a0717b4':
         if btn_value:
             headers = {
             "Accept": "application/json",
