@@ -86,8 +86,10 @@ def receive_lora_data():
     #if dev_eui ==lilygo - check payload obj
     #send downlink with command as payload value
     if dev_eui=='0a10aced202194944a0717b4':
+         print("-correct device-")
         if btn_value:
             headers = {
+            print("-button value got-")
             "Accept": "application/json",
             "Content-Type": "application/json",
             "Authorization": f"Bearer {API_KEY}",
