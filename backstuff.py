@@ -18,44 +18,44 @@ API_KEY = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJjaGlycHN0YWNrIiwiaXNz
 
 
 
-@app.route("/api/downlink", methods=['POST'])
-def downlink_process():
-    try:
+# @app.route("/api/downlink", methods=['POST'])
+# def downlink_process():
+#     try:
         
-        data=request.json
-        command = data.get("command")
-        if not command:
-            return jsonify({"error":"no command"}),400
-        headers = {
-            "Accept": "application/json",
-            "Content-Type": "application/json",
-            "Authorization": f"Bearer {API_KEY}",
-        }
+#         data=request.json
+#         command = data.get("command")
+#         if not command:
+#             return jsonify({"error":"no command"}),400
+#         headers = {
+#             "Accept": "application/json",
+#             "Content-Type": "application/json",
+#             "Authorization": f"Bearer {API_KEY}",
+#         }
 
-        payload = {
-        "flushQueue": False,
-        "queueItem": {
-            "confirmed": False,
-            "data": "string",
-            # "expiresAt": "2026-06-17T11:54:15.788Z",
-            "fCntDown": 0,
-            "fPort": 223,
-            "id": "string",
-            "isEncrypted": False,
-            "isPending": True,
-            "object": {
-        "command":command
-        }
-        }
-        }
-        response = requests.post(API_URL, json=payload, headers=headers, verify=False)
-        if response.status_code == 200:
-            print("Success! Downlink successfully enqueued.")
-            return(response.json())
-        else:
-            return(f"Failed with code {response.status_code}: {response.text}")
-    except Exception as e:
-        return(f"Network error: {e}")
+#         payload = {
+#         "flushQueue": False,
+#         "queueItem": {
+#             "confirmed": False,
+#             "data": "string",
+#             # "expiresAt": "2026-06-17T11:54:15.788Z",
+#             "fCntDown": 0,
+#             "fPort": 223,
+#             "id": "string",
+#             "isEncrypted": False,
+#             "isPending": True,
+#             "object": {
+#         "command":command
+#         }
+#         }
+#         }
+#         response = requests.post(API_URL, json=payload, headers=headers, verify=False)
+#         if response.status_code == 200:
+#             print("Success! Downlink successfully enqueued.")
+#             return(response.json())
+#         else:
+#             return(f"Failed with code {response.status_code}: {response.text}")
+#     except Exception as e:
+#         return(f"Network error: {e}")
 
 
 
